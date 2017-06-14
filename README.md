@@ -11,6 +11,8 @@ This is a port of CodeGuro's anm2png for WIN32 operating systems to work on Linu
     make && sudo make install
 These commands compile and copy the executable to /usr/bin.
 
+Alternatively, you can download the binary [here](https://github.com/roikale/anm2png-linux/releases/latest).
+
 ## Usage
     anm2png FILE
 converts a touhou animation file to PNG.

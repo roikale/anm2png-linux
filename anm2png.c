@@ -80,14 +80,14 @@ int thtx_to_png(ANM_THTX_HEADER *head, png_byte *bmp, char *outname)
 	if(fp != NULL) {
 		fclose(fp);
         strncpy(namebuf, poutname, FILENAME_MAX);
-        strncpy(bname, basename(outname), FILENAME_MAX);
-
         tmpext = strtok(namebuf, ".");
         while((tmpext = strtok(NULL, ".")) != NULL) {
             strncpy(ext, tmpext, EXTENSION_MAX);
         }
+        strncpy(bname, namebuf, FILENAME_MAX);
+
 		for(i = 0; i < INT_MAX; ++i) {
-			sprintf(newoutname, "%s_%d%s", bname, i, ext);
+			sprintf(newoutname, "%s_%d.%s", bname, i, ext);
 			fp = fopen(newoutname, "r");
 			if(fp == NULL) break;
 			fclose(fp);
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
             strncpy(namebuf, name, FILENAME_MAX);
 			filename = basename(namebuf);
 			
-			printf("Converting...");
+			printf("Converting...\n");
 			thtx_to_png(&thtx, entbuf, filename);
 			free(entbuf);
 		}

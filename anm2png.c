@@ -65,6 +65,7 @@ int thtx_to_png(ANM_THTX_HEADER *head, png_byte *bmp, char *outname)
 	char bname[FILENAME_MAX];
 	char ext[EXTENSION_MAX];
 	char newoutname[FILENAME_MAX];
+	char namebuf[FILENAME_MAX];
 	char *poutname;
 	char *tmpext;
 	FILE *fp;
@@ -78,8 +79,11 @@ int thtx_to_png(ANM_THTX_HEADER *head, png_byte *bmp, char *outname)
 	fp = fopen(poutname, "r");
 	if(fp != NULL) {
 		fclose(fp);
-        strncpy(bname, basename(poutname), FILENAME_MAX);
-        while((tmpext = strtok(poutname, ".")) != NULL) {
+        strncpy(namebuf, poutname, FILENAME_MAX);
+        strncpy(bname, basename(outname), FILENAME_MAX);
+
+        tmpext = strtok(namebuf, ".");
+        while((tmpext = strtok(NULL, ".")) != NULL) {
             strncpy(ext, tmpext, EXTENSION_MAX);
         }
 		for(i = 0; i < INT_MAX; ++i) {
@@ -255,6 +259,7 @@ int main(int argc, char *argv[])
 	ANM_THTX_HEADER  thtx;
 	ANM_REGION *regbuf;
 	char name[FILENAME_MAX];
+	char namebuf[FILENAME_MAX];
 	char *filename;
 	char *entbuf;
 	long filelen;
@@ -350,11 +355,11 @@ int main(int argc, char *argv[])
 					regbuf[i].left, regbuf[i].top, 
 					regbuf[i].right, regbuf[i].bottom);
 			}
-			filename = strrchr(name, '/');
-			if(filename != NULL) ++filename;
-			else filename = name;
+            // Copy the name to a buffer as basename() modifies it
+            strncpy(namebuf, name, FILENAME_MAX);
+			filename = basename(namebuf);
 			
-			printf("Converting...\n", name);
+			printf("Converting...");
 			thtx_to_png(&thtx, entbuf, filename);
 			free(entbuf);
 		}
